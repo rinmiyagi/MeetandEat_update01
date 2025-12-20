@@ -22,7 +22,7 @@ type NominatimResult = {
     lon: string;
 };
 
-export function LocationSearch({ onSelect, placeholder = "駅名や場所を検索...", defaultValue = "" }: LocationSearchProps) {
+export function LocationSearch({ onSelect, placeholder = "駅名を検索...", defaultValue = "" }: LocationSearchProps) {
     const [query, setQuery] = useState(defaultValue);
     const [results, setResults] = useState<NominatimResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,7 @@ export function LocationSearch({ onSelect, placeholder = "駅名や場所を検�
     // Debounce logic
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (query.length > 2 && isOpen) {
+            if (query.length > 1 && isOpen) {
                 searchLocation(query);
             }
         }, 500);
