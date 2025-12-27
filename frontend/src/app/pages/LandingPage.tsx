@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
-            <img src="/meetAndEat_circle.png" alt="Meet and Eat Circle Icon" className="w-8 h-8" />
+              <img src="/meetAndEat_circle.png" alt="Meet and Eat Circle Icon" className="w-8 h-8" />
             </div>
             <div>
               <h1 className="text-xl text-gray-900">ミートアンドイート</h1>
@@ -50,11 +50,23 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h4 className="text-sm mb-4 text-gray-300">使用技術</h4>
+              <h4 className="text-sm mb-4 text-gray-300">Credits & Data</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li>Google Routes API</li>
-                <li>ホットペッパーAPI</li>
-                <li>Compute Route Matrix Pro</li>
+                <li>
+                  Powered by <a href="https://mapsplatform.google.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Google Maps Platform</a>
+                </li>
+                <li>
+                  Powered by <a href="https://webservice.recruit.co.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Hot Pepper Gourmet Search API</a>
+                </li>
+                <li>
+                  Powered by <a href="http://express.heartrails.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">HeartRails Express</a>
+                </li>
+                <li>
+                  Powered by <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Nominatim</a>
+                </li>
+                <li>
+                  Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">OpenStreetMap</a> contributors
+                </li>
               </ul>
             </div>
             <div>
