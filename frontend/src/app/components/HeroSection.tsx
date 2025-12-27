@@ -59,8 +59,6 @@ export function HeroSection() {
 
       if (userError) throw userError;
 
-      toast.success("イベントを作成しました！");
-
       // 3. 次のページへ遷移（state に ID を持たせる）
       navigate(`/admin?hash=${eventData.hash}`, {
         state: {
