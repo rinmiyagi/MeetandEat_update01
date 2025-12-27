@@ -62,16 +62,6 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', weekday: 'short' })
-      .replace(/\//g, '月')
-      .replace(/\s/g, '') + (dateStr.includes('日') ? '' : '日'); // Custom formatting if needed, but toLocaleString is often enough with options.
-    // Let's use a simpler standard Japanese format
-    // "12月27日(金)" format
-  };
-
-  // Re-implement formatDate properly
-  const formatDateJP = (dateStr: string) => {
-    const date = new Date(dateStr + 'T00:00:00');
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -125,7 +115,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
           .map(([dateStr, hours]) => (
             <div key={dateStr} className="pb-3 border-b border-gray-100 last:border-b-0">
               <div className="text-sm mb-1 text-gray-900">
-                {formatDateJP(dateStr)}
+                {formatDate(dateStr)}
               </div>
               <div className="text-sm text-gray-600">
                 {formatTimeRange(hours)}
