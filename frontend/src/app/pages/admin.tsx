@@ -1,5 +1,5 @@
 import { CopyIcon, Info } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
@@ -169,12 +169,25 @@ export default function App() {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setIsCopied(true);
-      window.setTimeout(() => setIsCopied(false), 1500);
+      window.setTimeout(() => setIsCopied(false), 2000); // Increase duration slightly for visibility
     } catch (error) {
       console.error("Error copying URL:", error);
-      toast.error("URLのコピーに失敗しました");
+      // Don't show error toast for auto-copy to avoid confusion/annoyance if blocked
+      // usage within useEffect will catch this
     }
   };
+
+  // Auto-copy when modal opens
+  useEffect(() => {
+    if (isShareModalOpen && shareUrl) {
+      // We use a small timeout to ensure the modal is rendered and to separate from the render cycle slightly, 
+      // though clipboard API is not DOM-dependent, it helps with state synchronization.
+      // However, to keep the user interaction context active as much as possible, immediate execution is better. 
+      // But checking if it's already copied or just triggering it once is key.
+      // Since isShareModalOpen changes from false to true, this runs once.
+      handleCopyShareUrl();
+    }
+  }, [isShareModalOpen, shareUrl]);
 
   const handleDateClick = (date: Date) => {
     setCurrentDate(date);
@@ -277,8 +290,8 @@ export default function App() {
                 <CopyIcon className="size-4" />
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {isCopied ? "コピーしました。" : "OKを押すと集計画面へ移動します。"}
+            <p className={`text-xs h-4 transition-colors ${isCopied ? "text-orange-600 font-bold" : "text-muted-foreground"}`}>
+              {isCopied ? "コピーしました！" : "OKを押すと集計画面へ移動します。"}
             </p>
           </div>
           <DialogFooter>
