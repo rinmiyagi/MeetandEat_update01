@@ -57,14 +57,26 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
   };
 
   const formatTime = (hour: number) => {
-    const period = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    return `${displayHour}${period}`;
+    return `${hour}:00`;
   };
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', weekday: 'short' })
+      .replace(/\//g, '月')
+      .replace(/\s/g, '') + (dateStr.includes('日') ? '' : '日'); // Custom formatting if needed, but toLocaleString is often enough with options.
+    // Let's use a simpler standard Japanese format
+    // "12月27日(金)" format
+  };
+
+  // Re-implement formatDate properly
+  const formatDateJP = (dateStr: string) => {
+    const date = new Date(dateStr + 'T00:00:00');
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+    const weekday = weekdays[date.getDay()];
+    return `${month}月${day}日(${weekday})`;
   };
 
   const groupedSlots = groupSlotsByDate();
@@ -75,7 +87,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
       <div className="bg-white border-l border-gray-200 p-6 w-80 flex flex-col gap-4">
         <div className="flex items-center gap-2 mb-2">
           <Clock className="w-5 h-5 text-gray-500" />
-          <h3 className="text-gray-900">Your Availability</h3>
+          <h3 className="text-gray-900">選択日時</h3>
         </div>
 
         {errorMessage && (
@@ -86,7 +98,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
         )}
 
         <p className="text-sm text-gray-500">
-          Click and drag on the calendar to select your available time slots.
+          カレンダーをドラッグして、候補日時の範囲を選択してください。
         </p>
       </div>
     );
@@ -96,7 +108,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
     <div className="bg-white border-l border-gray-200 p-6 w-80 overflow-auto flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-2">
         <Clock className="w-5 h-5 text-orange-600" />
-        <h3 className="text-gray-900">Your Availability</h3>
+        <h3 className="text-gray-900">選択日時</h3>
       </div>
 
       {errorMessage && (
@@ -113,7 +125,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
           .map(([dateStr, hours]) => (
             <div key={dateStr} className="pb-3 border-b border-gray-100 last:border-b-0">
               <div className="text-sm mb-1 text-gray-900">
-                {formatDate(dateStr)}
+                {formatDateJP(dateStr)}
               </div>
               <div className="text-sm text-gray-600">
                 {formatTimeRange(hours)}
@@ -124,7 +136,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
 
       <div className="mt-6 pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-500">
-          {selectedSlots.size} {selectedSlots.size === 1 ? 'slot' : 'slots'} selected
+          {selectedSlots.size}件選択中
         </div>
       </div>
     </div>
