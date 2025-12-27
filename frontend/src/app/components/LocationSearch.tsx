@@ -31,7 +31,8 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
         handleGetCurrentLocation,
         handleSelect,
         formatAddress,
-        error
+        error,
+        executeSearch
     } = useLocationSearch(onSelect, defaultValue);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -60,25 +61,33 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                 </TabsList>
 
                 <TabsContent value="search" className="relative mt-0">
-                    <div className="relative">
-                        <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                        <Input
-                            type="text"
-                            placeholder={placeholder}
-                            value={query}
-                            onChange={(e) => {
-                                setQuery(e.target.value);
-                                setDetectedAddress(null); // Clear detection if user types manual query
-                                setIsOpen(true);
-                            }}
-                            onFocus={() => setIsOpen(true)}
-                            className="pl-10 h-11 w-full"
-                        />
-                        {isLoading && (
-                            <div className="absolute right-3 top-3">
-                                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                            </div>
-                        )}
+                    <div className="relative flex gap-2">
+                        <div className="relative flex-1">
+                            <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                            <Input
+                                type="text"
+                                placeholder={placeholder}
+                                value={query}
+                                onChange={(e) => {
+                                    setQuery(e.target.value);
+                                    setDetectedAddress(null);
+                                    // setIsOpen(true); // Don't open automatically on type
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        executeSearch();
+                                    }
+                                }}
+                                className="pl-10 h-11 w-full"
+                            />
+                        </div>
+                        <Button
+                            onClick={() => executeSearch()}
+                            disabled={isLoading}
+                            className="h-11 px-6 bg-orange-600 hover:bg-orange-700 text-white"
+                        >
+                            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                        </Button>
                     </div>
 
                     {error && (

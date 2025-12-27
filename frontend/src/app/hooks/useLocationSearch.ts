@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { LocationData } from '../components/LocationSearch';
 
 export type NominatimAddress = {
@@ -36,16 +36,9 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
     const [detectedAddress, setDetectedAddress] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Debounce logic
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (query.length > 1 && isOpen) {
-                searchLocation(query);
-            }
-        }, 500);
+    // Auto-search removed for Nominatim compliance
 
-        return () => clearTimeout(timer);
-    }, [query, isOpen]);
+    // ... helper functions ...
 
     const formatAddress = (result: NominatimResult): { name: string; region: string } => {
         if (!result.address) {
@@ -89,13 +82,17 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
         return null;
     };
 
-    const searchLocation = async (q: string) => {
+    const executeSearch = async () => {
+        if (!query.trim()) return;
+
         setIsLoading(true);
         setError(null);
+        setIsOpen(true); // Open dropdown when search starts
+
         try {
             // ... keys ...
             const params = new URLSearchParams({
-                q: q,
+                q: query,
                 format: 'json',
                 addressdetails: '1',
                 limit: '5',
@@ -247,6 +244,7 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
         error, // Expose error
         handleGetCurrentLocation,
         handleSelect,
-        formatAddress
+        formatAddress,
+        executeSearch
     };
 }
