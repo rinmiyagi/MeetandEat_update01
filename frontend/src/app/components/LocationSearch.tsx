@@ -2,7 +2,8 @@ import { useRef, useEffect } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Loader2, MapPin, Search, Navigation } from 'lucide-react';
+import { Loader2, MapPin, Search, Navigation, CheckCircle2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { useLocationSearch, NominatimResult } from '../hooks/useLocationSearch';
 
 export interface LocationData {
@@ -119,16 +120,19 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                     </Button>
 
                     {detectedAddress && (
-                        <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md animate-in fade-in slide-in-from-top-2">
-                            <p className="text-xs text-green-800 font-semibold mb-1">取得された位置情報:</p>
-                            <div className="flex items-center gap-2 text-green-700">
-                                <MapPin className="w-4 h-4 shrink-0" />
-                                <span className="font-medium text-sm break-all">{detectedAddress}</span>
-                            </div>
-                            <p className="mt-2 text-xs text-green-600/80">
-                                ※意図しない場所の場合は、検索タブから駅や施設名を指定してください
-                            </p>
-                        </div>
+                        <Alert className="mt-4 border-green-200 bg-green-50/50 text-green-900">
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            <AlertTitle className="text-green-800">位置情報を取得しました</AlertTitle>
+                            <AlertDescription className="text-green-700">
+                                <div className="flex items-center gap-1 mt-1 font-medium">
+                                    <MapPin className="h-3.5 w-3.5" />
+                                    {detectedAddress}
+                                </div>
+                                <div className="text-xs text-green-600/80 mt-1">
+                                    ※意図しない場所の場合は、検索タブから駅や施設名を指定してください
+                                </div>
+                            </AlertDescription>
+                        </Alert>
                     )}
                 </TabsContent>
             </Tabs>

@@ -1,5 +1,6 @@
 import { CopyIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
@@ -72,13 +73,13 @@ export default function App() {
 
   const handleSaveSchedules = async () => {
     if (selectedSlots.size === 0) {
-      alert("日程を選択してください");
+      toast.error("日程を選択してください");
       return;
     }
 
     // ここで userId の存在を確認
     if (!userId) {
-      alert("ユーザーIDが見つかりません。イベント作成からやり直してください。");
+      toast.error("ユーザーIDが見つかりません。イベント作成からやり直してください。");
       return;
     }
 
@@ -105,7 +106,7 @@ export default function App() {
       setIsShareModalOpen(true);
     } catch (error: any) {
       console.error("Error saving schedules:", error);
-      alert(`保存に失敗しました: ${error.message}`);
+      toast.error(`保存に失敗しました: ${error.message}`);
     }
   };
 
@@ -167,7 +168,7 @@ export default function App() {
       window.setTimeout(() => setIsCopied(false), 1500);
     } catch (error) {
       console.error("Error copying URL:", error);
-      alert("URLのコピーに失敗しました");
+      toast.error("URLのコピーに失敗しました");
     }
   };
 

@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useNavigate を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
@@ -128,7 +129,7 @@ export default function Participant() {
   // ★ 追加：参加者の保存処理
   const handleSaveParticipantSchedules = async (name: string) => {
     if (selectedSlots.size === 0) {
-      alert("日程を1つ以上選択してください");
+      toast.error("日程を1つ以上選択してください");
       return;
     }
 
@@ -171,12 +172,12 @@ export default function Participant() {
 
       if (schedError) throw schedError;
 
-      alert("回答を保存しました！集計画面へ移動します。");
+      toast.success("回答を保存しました！集計画面へ移動します。");
       setIsNameModalOpen(false);
       navigate(`/result?eventId=${eventId}`);
     } catch (error: any) {
       console.error("Error saving schedules:", error);
-      alert(`保存に失敗しました: ${error.message}`);
+      toast.error(`保存に失敗しました: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -184,7 +185,7 @@ export default function Participant() {
 
   const handleOpenNameModal = () => {
     if (selectedSlots.size === 0) {
-      alert("日程を1つ以上選択してください");
+      toast.error("日程を1つ以上選択してください");
       return;
     }
     setIsNameModalOpen(true);
