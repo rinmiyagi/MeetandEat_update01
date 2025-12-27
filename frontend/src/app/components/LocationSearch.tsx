@@ -28,7 +28,8 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
         detectedAddress,
         setDetectedAddress,
         handleGetCurrentLocation,
-        handleSelect
+        handleSelect,
+        formatAddress
     } = useLocationSearch(onSelect, defaultValue);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -86,7 +87,20 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                                     className="px-4 py-3 hover:bg-orange-50 cursor-pointer text-sm text-gray-700 border-b last:border-0"
                                     onClick={() => handleSelect(result)}
                                 >
-                                    {result.display_name}
+                                    {(() => {
+                                        const formatted = formatAddress(result);
+                                        return (
+                                            <div className="flex flex-col">
+                                                <div className="font-medium text-gray-900">
+                                                    {formatted.name}
+                                                    {formatted.region && <span className="ml-2 font-normal text-gray-700">({formatted.region})</span>}
+                                                </div>
+                                                <div className="text-xs text-gray-400 mt-0.5 truncate">
+                                                    {result.display_name}
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
                                 </li>
                             ))}
                         </ul>
