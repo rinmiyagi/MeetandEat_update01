@@ -29,7 +29,7 @@ export default function Result() {
     if (!eventId || isFinalizing) return;
     setIsFinalizing(true);
     try {
-      const { error } = await supabase.functions.invoke('finalize-event', {
+      const { error } = await supabase.functions.invoke('finalize-event-v2', {
         body: { event_id: eventId },
       });
 
