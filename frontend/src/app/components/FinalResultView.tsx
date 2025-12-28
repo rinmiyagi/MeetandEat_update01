@@ -3,12 +3,10 @@ import { useState } from "react";
 import VotingStatusView from "./VotingStatusView";
 import ShareButtons from "./ShareButtons";
 
-interface Restaurant {
-    name: string;
-    address: string;
-    urls: { pc: string };
-    genre?: { name: string };
-}
+import { RestaurantCard, Restaurant } from "./RestaurantCard";
+import { formatDateLabel } from "../utils/votingUtils";
+
+/* interface Restaurant removed - imported from RestaurantCard */
 
 interface FinalResultViewProps {
     confirmedDate: string;
@@ -36,17 +34,7 @@ export const FinalResultView = ({
     totalExpectedParticipants
 }: FinalResultViewProps) => {
     const [isVotingDetailsOpen, setIsVotingDetailsOpen] = useState(false);
-    const dateObj = new Date(confirmedDate);
-    const dateStr = dateObj.toLocaleDateString("ja-JP", {
-        month: "2-digit",
-        day: "2-digit",
-        weekday: "short",
-    });
-    const timeStr = dateObj.toLocaleTimeString("ja-JP", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-    });
+    const [dateStr, timeStr] = formatDateLabel(confirmedDate);
 
 
 
@@ -98,22 +86,7 @@ export const FinalResultView = ({
             <div className="w-full border-t border-gray-100 pt-6">
                 <h2 className="text-lg font-semibold mb-4 text-gray-800">お店一覧</h2>
                 {restaurantInfo.map((shop, index) => (
-                    <div key={index} className="flex flex-col gap-2 mb-6 border-b border-gray-100 last:border-0 pb-6 last:pb-0">
-                        <h3 className="text-xl font-bold text-gray-900">{index + 1}. {shop.name}</h3>
-                        {shop.genre && <span className="inline-block bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs w-fit">{shop.genre.name}</span>}
-                        <p className="text-gray-600 mt-2 text-sm">{shop.address}</p>
-
-                        {shop.urls?.pc && (
-                            <a
-                                href={shop.urls.pc}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-4 text-center w-full block bg-orange-500 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors"
-                            >
-                                お店の詳細を見る
-                            </a>
-                        )}
-                    </div>
+                    <RestaurantCard key={index} shop={shop} index={index} />
                 ))}
             </div>
 

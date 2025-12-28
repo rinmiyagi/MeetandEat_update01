@@ -1,6 +1,5 @@
 "use client";
 import { Route, Routes } from "react-router-dom";
-import Restaurant from "./components/Restaurant.tsx";
 import AdminPage from "./pages/admin.tsx";
 import LP from "./pages/LandingPage.tsx";
 import Participant from "./pages/Participant.tsx";
@@ -16,8 +15,6 @@ export default function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/result" element={<Result />} />
         <Route path="/participant" element={<Participant />} />
-        {/* 結果表示できるかのテスト */}
-        <Route path="/restaurant" element={<Restaurant />} />
       </Routes>
       <Toaster />
     </>
