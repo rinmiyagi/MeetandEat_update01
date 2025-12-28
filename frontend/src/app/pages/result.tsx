@@ -77,11 +77,9 @@ export default function Result() {
 
         const participantIds = (participantUsers ?? []).map((user) => user.id);
 
-        const totalParticipants = 1 + participantIds.length;
 
-        if (!event.confirmed_date && totalParticipants >= event.amount && !isFinalizing) {
-          handleFinalizeEvent();
-        }
+
+        // Auto-finalize removed. Waiting for manual trigger.
 
         if (participantIds.length === 0) {
           setParticipants([]);
@@ -182,6 +180,19 @@ export default function Result() {
           </div>
         ) : (
           <div className="w-full px-4 max-w-screen-lg mx-auto mt-20">
+            {!eventData.confirmed_date && (1 + participants.length) >= eventData.amount && (
+              <div className="mb-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center shadow-sm">
+                <h2 className="text-2xl font-bold text-orange-600 mb-4">全員の投票が完了しました！</h2>
+                <p className="text-gray-700 mb-6">「結果を見る」ボタンを押して、開催場所とお店を決定しましょう。</p>
+                <button
+                  onClick={handleFinalizeEvent}
+                  disabled={isFinalizing}
+                  className="bg-orange-600 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isFinalizing ? "計算中..." : "結果を見る"}
+                </button>
+              </div>
+            )}
             <AnswersView
               organizerId={organizerId}
               organizerName={organizerName}
