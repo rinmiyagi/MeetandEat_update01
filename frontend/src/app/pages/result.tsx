@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useSearchParams } from "react-router-dom";
-import AnswersView from "../components/AnswersView";
+import VotingStatusView from "../components/VotingStatusView";
 import { FinalResultView } from "../components/FinalResultView";
 import { supabase } from "../lib/supabaseClient";
 import { Header } from "../components/Header";
@@ -158,14 +158,14 @@ export default function Result() {
   if (!eventData) return <div className="p-10 text-center">読み込み中...</div>;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Navigation Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="pt-16">
+      <main className="flex-grow pt-24 pb-20">
         {eventData.confirmed_date ? (
-          <div className="w-full px-4 max-w-screen-lg mx-auto mt-20">
+          <div className="w-full px-4 max-w-screen-lg mx-auto">
             <FinalResultView
               confirmedDate={eventData.confirmed_date}
               restaurantInfo={eventData.restaurant_info}
@@ -173,31 +173,35 @@ export default function Result() {
             />
           </div>
         ) : isFinalizing ? (
-          <div className="flex flex-col items-center justify-center mt-20 p-10">
+          <div className="flex flex-col items-center justify-center p-10 h-full">
             <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
             <p className="text-xl font-semibold text-gray-700">イベントを確定中...</p>
             <p className="text-gray-500">最適なスケジュールとお店を計算しています！</p>
           </div>
         ) : (
-          <div className="w-full px-4 max-w-screen-lg mx-auto mt-20">
+          <div className="w-full px-4 max-w-screen-lg mx-auto">
             {!eventData.confirmed_date && (1 + participants.length) >= eventData.amount && (
-              <div className="mb-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center shadow-sm">
-                <h2 className="text-2xl font-bold text-orange-600 mb-4">全員の投票が完了しました！</h2>
-                <p className="text-gray-700 mb-6">「結果を見る」ボタンを押して、開催場所とお店を決定しましょう。</p>
+              <div className="mb-10 p-8 bg-orange-50 border border-orange-200 rounded-lg text-center shadow-lg transform transition-all hover:scale-[1.01]">
+                <h2 className="text-2xl font-bold text-orange-600 mb-4">全員の投票が完了しました！🎉</h2>
+                <p className="text-gray-700 mb-6 text-lg">
+                  皆様、ご協力ありがとうございます。<br />
+                  「結果を見る」ボタンを押して、開催場所とお店を決定しましょう。
+                </p>
                 <button
                   onClick={handleFinalizeEvent}
                   disabled={isFinalizing}
-                  className="bg-orange-600 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg hover:bg-orange-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-orange-600 text-white text-lg font-bold py-3 px-10 rounded-full shadow-lg hover:bg-orange-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isFinalizing ? "計算中..." : "結果を見る"}
                 </button>
               </div>
             )}
-            <AnswersView
+            <VotingStatusView
               organizerId={organizerId}
               organizerName={organizerName}
               organizerDates={organizerDates}
               participants={participants}
+              totalExpectedParticipants={eventData.amount}
             />
           </div>
         )}
