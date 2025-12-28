@@ -6,7 +6,7 @@ type Row = {
   highlight?: boolean;
 };
 
-type AnswersViewProps = {
+type VotingStatusViewProps = {
   organizerId: string | null;
   organizerName: string | null;
   organizerDates: string[];
@@ -15,6 +15,7 @@ type AnswersViewProps = {
     name: string | null;
     dates: string[];
   }[];
+  totalExpectedParticipants?: number;
 };
 
 const formatDateLabel = (isoString: string) => {
@@ -34,12 +35,13 @@ const formatDateLabel = (isoString: string) => {
   return [dateLabel, timeLabel];
 };
 
-export default function AnswersView({
+export default function VotingStatusView({
   organizerId,
   organizerName,
   organizerDates,
-  participants
-}: AnswersViewProps) {
+  participants,
+  totalExpectedParticipants
+}: VotingStatusViewProps) {
   const organizerLabel = organizerName ?? organizerId ?? "幹事";
   const participantLabels = participants.map(
     (participant) => participant.name ?? participant.id ?? "参加者"
@@ -86,8 +88,25 @@ export default function AnswersView({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="py-2 font-semibold text-lg">
-        最適な候補：{bestCandidate ? formatDateLabel(bestCandidate.date).join(" ") : "未定"}
+      <div className="py-4 mb-4">
+        {bestCandidate ? (
+          <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r shadow-sm flex flex-col gap-2">
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="text-orange-800 font-bold text-lg">🌟 現時点での最適候補：</span>
+              <span className="text-2xl font-bold text-gray-800 tracking-wide">
+                {formatDateLabel(bestCandidate.date).join(" ")}
+              </span>
+            </div>
+            <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600">
+                投票状況: <span className="font-bold">{participantLabels.length + 1}</span> /
+                <span className="font-bold ml-1">{totalExpectedParticipants ?? "?"}</span> 人が投票済み
+              </p>
+            </p>
+          </div>
+        ) : (
+          <div className="text-gray-500 font-medium">現時点での最適候補：未定</div>
+        )}
       </div>
       <table className="min-w-[720px] w-full table-fixed border border-slate-300 text-sm text-slate-900">
         <colgroup>
@@ -112,7 +131,7 @@ export default function AnswersView({
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex} className={row.highlight ? "bg-orange-200" : "bg-white"}>
               <th className="border border-slate-300 px-3 py-4 text-left font-normal">
-                <div className="leading-tight">
+                <div className={`leading-tight ${row.highlight ? "font-bold text-orange-900" : ""}`}>
                   {row.labelLines.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
