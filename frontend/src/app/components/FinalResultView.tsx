@@ -1,4 +1,6 @@
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import VotingStatusView from "./VotingStatusView";
 
 interface Restaurant {
     name: string;
@@ -11,9 +13,28 @@ interface FinalResultViewProps {
     confirmedDate: string;
     restaurantInfo: Restaurant[];
     nearestStation: string;
+    organizerId: string | null;
+    organizerName: string | null;
+    organizerDates: string[];
+    participants: {
+        id: string;
+        name: string | null;
+        dates: string[];
+    }[];
+    totalExpectedParticipants?: number;
 }
 
-export const FinalResultView = ({ confirmedDate, restaurantInfo, nearestStation }: FinalResultViewProps) => {
+export const FinalResultView = ({
+    confirmedDate,
+    restaurantInfo,
+    nearestStation,
+    organizerId,
+    organizerName,
+    organizerDates,
+    participants,
+    totalExpectedParticipants
+}: FinalResultViewProps) => {
+    const [isVotingDetailsOpen, setIsVotingDetailsOpen] = useState(false);
     const dateObj = new Date(confirmedDate);
     const dateStr = dateObj.toLocaleDateString("ja-JP", {
         month: "2-digit",
@@ -50,6 +71,30 @@ export const FinalResultView = ({ confirmedDate, restaurantInfo, nearestStation 
                 </div>
             </div>
 
+            {/* Voting Details Toggle */}
+            <div className="w-full border-b border-gray-100 pb-6 mb-6">
+                <button
+                    onClick={() => setIsVotingDetailsOpen(!isVotingDetailsOpen)}
+                    className="flex items-center justify-center w-full gap-2 text-gray-500 hover:text-orange-600 transition-colors py-2"
+                >
+                    <span className="font-medium text-sm">投票結果の詳細を見る</span>
+                    {isVotingDetailsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+
+                {isVotingDetailsOpen && (
+                    <div className="mt-4 animate-in fade-in slide-in-from-top-4 duration-300">
+                        <VotingStatusView
+                            organizerId={organizerId}
+                            organizerName={organizerName}
+                            organizerDates={organizerDates}
+                            participants={participants}
+                            totalExpectedParticipants={totalExpectedParticipants}
+                            showSummary={false}
+                        />
+                    </div>
+                )}
+            </div>
+
             {/* Location / Station */}
             <div className="w-full mb-6 text-left">
                 <h2 className="text-sm font-semibold text-gray-500 mb-2">集合場所</h2>
@@ -82,6 +127,7 @@ export const FinalResultView = ({ confirmedDate, restaurantInfo, nearestStation 
                     </div>
                 ))}
             </div>
+
         </div>
     );
 };
