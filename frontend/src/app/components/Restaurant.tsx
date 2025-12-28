@@ -1,5 +1,5 @@
 // frontend/src/app/components/Restaurante.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Shop {
   id: string;
@@ -8,7 +8,7 @@ interface Shop {
   genre: {
     name: string;
   }
-  urls:{
+  urls: {
     pc: string;
   };
 }
@@ -25,7 +25,7 @@ const Restaurant = () => {
 
         const response = await fetch('http://localhost:3001/api/restaurants');
         const data = await response.json();
-        
+
         if (response.ok) {
           setShops(data);
         } else {
