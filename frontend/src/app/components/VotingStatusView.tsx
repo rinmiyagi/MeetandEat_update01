@@ -16,6 +16,7 @@ type VotingStatusViewProps = {
     dates: string[];
   }[];
   totalExpectedParticipants?: number;
+  showSummary?: boolean;
 };
 
 const formatDateLabel = (isoString: string) => {
@@ -40,7 +41,8 @@ export default function VotingStatusView({
   organizerName,
   organizerDates,
   participants,
-  totalExpectedParticipants
+  totalExpectedParticipants,
+  showSummary = true
 }: VotingStatusViewProps) {
   const organizerLabel = organizerName ?? organizerId ?? "幹事";
   const participantLabels = participants.map(
@@ -88,31 +90,31 @@ export default function VotingStatusView({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="py-4 mb-4">
-        {bestCandidate ? (
-          <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r shadow-sm flex flex-col gap-2">
-            <div className="flex items-center flex-wrap gap-2">
-              <span className="text-orange-800 font-bold text-lg">🌟 現時点での最適候補：</span>
-              <span className="text-2xl font-bold text-gray-800 tracking-wide">
-                {formatDateLabel(bestCandidate.date).join(" ")}
-              </span>
-            </div>
-            <p className="text-sm text-gray-600">
+      {showSummary && (
+        <div className="py-4 mb-4">
+          {bestCandidate ? (
+            <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r shadow-sm flex flex-col gap-2">
+              <div className="flex items-center flex-wrap gap-2">
+                <span className="text-orange-800 font-bold text-lg">🌟 現時点での最適候補：</span>
+                <span className="text-2xl font-bold text-gray-800 tracking-wide">
+                  {formatDateLabel(bestCandidate.date).join(" ")}
+                </span>
+              </div>
               <p className="text-sm text-gray-600">
                 投票状況: <span className="font-bold">{participantLabels.length + 1}</span> /
                 <span className="font-bold ml-1">{totalExpectedParticipants ?? "?"}</span> 人が投票済み
               </p>
-            </p>
-          </div>
-        ) : (
-          <div className="text-gray-500 font-medium">現時点での最適候補：未定</div>
-        )}
-      </div>
-      <table className="min-w-[720px] w-full table-fixed border border-slate-300 text-sm text-slate-900">
+            </div>
+          ) : (
+            <div className="text-gray-500 font-medium">現時点での最適候補：未定</div>
+          )}
+        </div>
+      )}
+      <table className="w-full border border-slate-300 text-sm text-slate-900">
         <colgroup>
-          <col className="w-[220px]" />
+          <col className="w-auto min-w-[150px]" />
           {columns.slice(1).map((name) => (
-            <col key={name} className="w-[125px]" />
+            <col key={name} className="w-auto min-w-[80px]" />
           ))}
         </colgroup>
         <thead>

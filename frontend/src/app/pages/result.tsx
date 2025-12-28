@@ -170,6 +170,11 @@ export default function Result() {
               confirmedDate={eventData.confirmed_date}
               restaurantInfo={eventData.restaurant_info}
               nearestStation={eventData.target_station || "不明な駅"}
+              organizerId={organizerId}
+              organizerName={organizerName}
+              organizerDates={organizerDates}
+              participants={participants}
+              totalExpectedParticipants={eventData.amount}
             />
           </div>
         ) : isFinalizing ? (
