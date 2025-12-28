@@ -84,7 +84,7 @@ export const FinalResultView = ({
             {/* Restaurant Info */}
             {/* Restaurant Info */}
             <div className="w-full border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-semibold mb-4 text-gray-800">お店一覧</h2>
+                <h2 className="text-lg font-semibold mb-4 text-gray-800">周辺のおすすめ飲食店</h2>
                 {restaurantInfo.map((shop, index) => (
                     <RestaurantCard key={index} shop={shop} index={index} />
                 ))}
