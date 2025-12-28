@@ -1,8 +1,13 @@
+import { MapPin, ExternalLink, Banknote } from "lucide-react";
+
 export interface Restaurant {
     name: string;
     address: string;
     urls: { pc: string };
     genre?: { name: string };
+    photo?: { pc: { l: string } };
+    budget?: { name: string; average: string };
+    catch?: string;
 }
 
 interface RestaurantCardProps {
@@ -12,21 +17,76 @@ interface RestaurantCardProps {
 
 export const RestaurantCard = ({ shop, index }: RestaurantCardProps) => {
     return (
-        <div className="flex flex-col gap-2 mb-6 border-b border-gray-100 last:border-0 pb-6 last:pb-0">
-            <h3 className="text-xl font-bold text-gray-900">{index + 1}. {shop.name}</h3>
-            {shop.genre && <span className="inline-block bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs w-fit">{shop.genre.name}</span>}
-            <p className="text-gray-600 mt-2 text-sm">{shop.address}</p>
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 border border-gray-100 rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+            {/* Image Section */}
+            <div className="w-full sm:w-48 h-48 sm:h-auto flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 relative">
+                {shop.photo?.pc?.l ? (
+                    <img
+                        src={shop.photo.pc.l}
+                        alt={shop.name}
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <span className="text-sm">No Image</span>
+                    </div>
+                )}
+                {/* Ranking Badge */}
+                <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                    #{index + 1}
+                </div>
+            </div>
 
-            {shop.urls?.pc && (
-                <a
-                    href={shop.urls.pc}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 text-center w-full block bg-orange-500 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors"
-                >
-                    お店の詳細を見る
-                </a>
-            )}
+            {/* Content Section */}
+            <div className="flex flex-col flex-grow justify-between">
+                <div>
+                    {/* Genre & Catch */}
+                    <div className="flex flex-wrap items-baseline gap-2 mb-2">
+                        {shop.genre && (
+                            <span className="text-xs font-medium bg-orange-50 text-orange-600 px-2 py-1 rounded border border-orange-100">
+                                {shop.genre.name}
+                            </span>
+                        )}
+                        {shop.catch && (
+                            <span className="text-xs text-gray-500 line-clamp-1">
+                                {shop.catch}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Name */}
+                    <h3 className="text-lg font-bold text-gray-900 leading-tight mb-2">
+                        {shop.name}
+                    </h3>
+
+                    {/* Info Grid */}
+                    <div className="space-y-2 mb-4">
+                        <div className="flex items-start gap-2 text-sm text-gray-600">
+                            <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
+                            <span className="line-clamp-2">{shop.address}</span>
+                        </div>
+                        {shop.budget && (
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                <Banknote className="w-4 h-4 flex-shrink-0 text-gray-400" />
+                                <span>{shop.budget.average || shop.budget.name}</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Action Button */}
+                {shop.urls?.pc && (
+                    <a
+                        href={shop.urls.pc}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 w-full bg-orange-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-orange-700 transition-colors mt-2 sm:mt-0"
+                    >
+                        <span>お店の詳細を見る</span>
+                        <ExternalLink className="w-4 h-4" />
+                    </a>
+                )}
+            </div>
         </div>
     );
 };
