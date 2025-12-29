@@ -20,7 +20,7 @@ import {
 } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 import { supabase } from "../lib/supabaseClient";
-import { formatDateKey, toISOString } from "../lib/dateUtils";
+import { formatDateKey, toISOString, createDateFromKeyAndHour } from "../lib/dateUtils";
 
 export default function App() {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ export default function App() {
     const addDaySlots = (date: Date) => {
       const dateStr = formatDateKey(date);
       for (let hour = 0; hour < 24; hour++) {
-        const slotDate = new Date(`${dateStr}T${String(hour).padStart(2, "0")}:00:00`);
+        const slotDate = createDateFromKeyAndHour(dateStr, hour);
         if (slotDate.getTime() >= now.getTime()) {
           slots.add(`${dateStr}-${hour}`);
         }
@@ -94,7 +94,7 @@ export default function App() {
         const parts = slotKey.split("-");
         const hour = Number(parts.pop());
         const dateStr = parts.join("-");
-        const date = new Date(`${dateStr}T${String(hour).padStart(2, "0")}:00:00`);
+        const date = createDateFromKeyAndHour(dateStr, hour);
 
         return {
           user_id: userId,
