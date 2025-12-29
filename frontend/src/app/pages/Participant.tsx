@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { Info } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useNavigate を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
-import { LoadingOverlay } from "../components/LoadingOverlay";
+import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
 import { DayView } from "../components/DayView";
 import { LocationData, LocationSearch } from "../components/LocationSearch";

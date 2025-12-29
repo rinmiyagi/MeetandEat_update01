@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
-import { LoadingOverlay } from "../components/LoadingOverlay";
+import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
 import { DayView } from "../components/DayView";
 import { MonthView } from "../components/MonthView";

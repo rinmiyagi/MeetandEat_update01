@@ -8,6 +8,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { LocationSearch, LocationData } from './LocationSearch';
+import { LoadingOverlay } from './ui/loading-overlay';
 
 export function HeroSection() {
   const [eventName, setEventName] = useState("");
@@ -15,6 +16,7 @@ export function HeroSection() {
   const [participants, setParticipants] = useState(2);
   const [location, setLocation] = useState<LocationData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateEvent = async () => {
@@ -26,6 +28,7 @@ export function HeroSection() {
     }
 
     try {
+      setIsCreating(true);
       // 1. events テーブルに挿入
       const { data: eventData, error: eventError } = await supabase
         .from("events")
@@ -70,6 +73,7 @@ export function HeroSection() {
     } catch (error: any) {
       console.error("Error creating event:", error);
       toast.error(`作成に失敗しました: ${error.message}`);
+      setIsCreating(false); // Only reset on error, otherwise user sees glitch before nav
     }
   };
 
@@ -178,6 +182,7 @@ export function HeroSection() {
           </Card>
         </div>
       </div>
-    </section>
+      <LoadingOverlay isVisible={isCreating} message="イベントを作成しています..." />
+    </section >
   );
 }
