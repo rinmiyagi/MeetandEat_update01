@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, Share2, Check } from "lucide-react";
-import { toast } from "sonner";
 import { MESSAGES, UI_TEXT } from "../lib/constants";
 
 interface ShareButtonsProps {
@@ -23,11 +22,10 @@ export default function ShareButtons({ url, title = "Meat & Eat イベント結�
         try {
             await navigator.clipboard.writeText(url);
             setCopied(true);
-            toast.success(MESSAGES.SUCCESS.LINK_COPIED);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error("Failed to copy:", err);
-            toast.error(MESSAGES.ERROR.COPY_FAILED);
+            // Non-critical error, failed button state could be added if needed but toast removed as requested
         }
     };
 

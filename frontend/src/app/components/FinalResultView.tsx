@@ -57,9 +57,9 @@ export const FinalResultView = ({
                         <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">{UI_TEXT.DATE_TIME}</p>
                         <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-4">
                             <p className="text-2xl font-bold text-gray-800">{dateStr}</p>
-                            <div className="flex items-center gap-1 text-gray-700 font-semibold">
-                                <Clock className="w-4 h-4 text-orange-400" />
-                                <span>{timeStr}</span>
+                            <div className="flex items-center gap-2 text-gray-800 font-bold">
+                                <Clock className="w-6 h-6 text-orange-400" />
+                                <span className="text-2xl">{timeStr}</span>
                             </div>
                         </div>
                     </div>
