@@ -1,4 +1,4 @@
-import { calculateVotingData, formatDateLabel } from "../utils/votingUtils";
+import { calculateVotingData, formatDateLabel } from "../lib/votingUtils";
 
 type VotingStatusViewProps = {
   organizerId: string | null;

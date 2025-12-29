@@ -4,7 +4,7 @@ import VotingStatusView from "./VotingStatusView";
 import ShareButtons from "./ShareButtons";
 
 import { RestaurantCard, Restaurant } from "./RestaurantCard";
-import { formatDateLabel } from "../utils/votingUtils";
+import { formatDateLabel } from "../lib/votingUtils";
 
 /* interface Restaurant removed - imported from RestaurantCard */
 
