@@ -5,7 +5,7 @@ import { RefreshCcw } from "lucide-react";
 import VotingStatusView from "../components/VotingStatusView";
 import { FinalResultView } from "../components/FinalResultView";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
-import { supabase } from "../lib/supabaseClient";
+import { finalizeEvent } from "../lib/api/events";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { useResultData } from "../hooks/useResultData";
@@ -32,11 +32,9 @@ export default function Result() {
     if (!eventId || isFinalizing) return;
     setIsFinalizing(true);
     try {
-      const { error } = await supabase.functions.invoke('finalize-event-v2', {
-        body: { event_id: eventId },
-      });
+      await finalizeEvent(eventId);
 
-      if (error) throw error;
+
 
       window.location.reload();
 

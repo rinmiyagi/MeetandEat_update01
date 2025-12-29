@@ -19,8 +19,8 @@ import {
   DialogTitle
 } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
-import { supabase } from "../lib/supabaseClient";
 import { formatDateKey, toISOString, createDateFromKeyAndHour } from "../lib/dateUtils";
+import { saveSchedules } from "../lib/api/schedules";
 
 export default function App() {
   const navigate = useNavigate();
@@ -102,9 +102,7 @@ export default function App() {
         };
       });
 
-      const { error } = await supabase.from("schedules").insert(schedulesToInsert);
-
-      if (error) throw error;
+      await saveSchedules(schedulesToInsert);
 
       const baseUrl = window.location.origin;
       const nextShareUrl = `${baseUrl}/participant?eventId=${eventId}`;
