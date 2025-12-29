@@ -4,7 +4,8 @@ import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
-import { CalendarHeader, ViewType } from "../components/CalendarHeader";
+import { CalendarHeader } from "../components/CalendarHeader";
+import { ViewType } from "../lib/types";
 import { DayView } from "../components/DayView";
 import { MonthView } from "../components/MonthView";
 import { WeekView } from "../components/WeekView";

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { Button } from './ui/button';
 
-export type ViewType = 'day' | 'week' | 'month' | 'year';
+import { ViewType } from "../lib/types";
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -27,21 +27,21 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
   const formatDateRange = (date: Date, view: ViewType) => {
     if (view === 'day') {
-      return date.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        month: 'long', 
-        day: 'numeric', 
-        year: 'numeric' 
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
       });
     } else if (view === 'week') {
       const endDate = new Date(date);
       endDate.setDate(endDate.getDate() + 6);
-      
+
       const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
       const start = date.toLocaleDateString('en-US', options);
       const end = endDate.toLocaleDateString('en-US', options);
       const year = date.getFullYear();
-      
+
       return `${start} - ${end}, ${year}`;
     } else if (view === 'month') {
       return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -65,7 +65,7 @@ export function CalendarHeader({
         </div>
         {headerAction}
       </div>
-      
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -94,11 +94,10 @@ export function CalendarHeader({
             <button
               key={view}
               onClick={() => onViewChange(view)}
-              className={`px-4 py-1.5 rounded text-sm capitalize transition-colors ${
-                currentView === view
+              className={`px-4 py-1.5 rounded text-sm capitalize transition-colors ${currentView === view
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
-              }`}
+                }`}
             >
               {view}
             </button>
