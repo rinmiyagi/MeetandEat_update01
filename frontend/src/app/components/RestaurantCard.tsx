@@ -1,15 +1,7 @@
 import { MapPin, ExternalLink, Banknote } from "lucide-react";
 import { UI_TEXT } from "../lib/constants";
 
-export interface Restaurant {
-    name: string;
-    address: string;
-    urls: { pc: string };
-    genre?: { name: string };
-    photo?: { pc: { l: string } };
-    budget?: { name: string; average: string };
-    catch?: string;
-}
+import { Restaurant } from "../lib/types";
 
 interface RestaurantCardProps {
     shop: Restaurant;

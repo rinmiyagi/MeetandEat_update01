@@ -1,33 +1,8 @@
 import { useState } from 'react';
-import { LocationData } from '../components/LocationSearch';
+import { LocationData, NominatimResult } from '../lib/types';
 import { MESSAGES } from "../lib/constants";
 
-export type NominatimAddress = {
-    province?: string;
-    city?: string;
-    town?: string;
-    village?: string;
-    ward?: string;
-    city_district?: string;
-    suburb?: string;
-    neighbourhood?: string;
-    road?: string;
-    house_number?: string;
-    amenity?: string;
-    building?: string;
-    shop?: string;
-    office?: string;
-    tourism?: string;
-    historic?: string;
-    [key: string]: string | undefined;
-};
 
-export type NominatimResult = {
-    display_name: string;
-    lat: string;
-    lon: string;
-    address?: NominatimAddress;
-};
 
 export function useLocationSearch(onSelect: (location: LocationData) => void, defaultValue = "") {
     const [query, setQuery] = useState(defaultValue);

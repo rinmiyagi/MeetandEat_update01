@@ -4,7 +4,8 @@ import { useState } from "react";
 import VotingStatusView from "./VotingStatusView";
 import ShareButtons from "./ShareButtons";
 
-import { RestaurantCard, Restaurant } from "./RestaurantCard";
+import { RestaurantCard } from "./RestaurantCard";
+import { Restaurant } from "../lib/types";
 import { formatDateLabel } from "../lib/votingUtils";
 
 /* interface Restaurant removed - imported from RestaurantCard */

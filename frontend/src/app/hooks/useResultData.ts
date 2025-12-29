@@ -16,18 +16,7 @@ const localizeError = (message: string): string => {
     return `エラーが発生しました: ${message}`;
 };
 
-export type Participant = {
-    id: string;
-    name: string | null;
-    dates: string[];
-};
-
-export interface EventData {
-    amount: number;
-    confirmed_date: string | null;
-    restaurant_info: any;
-    target_station: string | null;
-}
+import { Participant, EventData } from "../lib/types";
 
 export const useResultData = (eventId: string | null) => {
     const [organizerId, setOrganizerId] = useState<string | null>(null);

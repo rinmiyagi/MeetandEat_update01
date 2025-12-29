@@ -1,10 +1,4 @@
-export type CellValue = "circle" | "cross" | null;
-
-export type Row = {
-    labelLines: string[];
-    cells: CellValue[];
-    highlight?: boolean;
-};
+import { CellValue, Row } from './types';
 
 export const formatDateLabel = (isoString: string) => {
     // Ensure the string is treated as UTC if it doesn't have timezone info

@@ -4,14 +4,9 @@ import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Loader2, MapPin, Search, Navigation, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { useLocationSearch, NominatimResult } from '../hooks/useLocationSearch';
+import { LocationData, NominatimResult } from '../lib/types';
+import { useLocationSearch } from '../hooks/useLocationSearch';
 import { UI_TEXT } from "../lib/constants";
-
-export interface LocationData {
-    name: string;
-    lat: number;
-    lng: number;
-}
 
 export interface LocationSearchProps {
     onSelect: (location: LocationData) => void;

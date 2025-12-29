@@ -4,9 +4,10 @@ import { Info } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useNavigate を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
-import { CalendarHeader, ViewType } from "../components/CalendarHeader";
+import { CalendarHeader } from "../components/CalendarHeader";
+import { ViewType, LocationData } from "../lib/types";
 import { DayView } from "../components/DayView";
-import { LocationData, LocationSearch } from "../components/LocationSearch";
+import { LocationSearch } from "../components/LocationSearch";
 import { MonthView } from "../components/MonthView";
 import { WeekView } from "../components/WeekView";
 import { YearView } from "../components/YearView";
