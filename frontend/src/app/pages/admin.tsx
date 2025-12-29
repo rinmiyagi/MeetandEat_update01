@@ -1,11 +1,11 @@
 import { CopyIcon, Info } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useCalendar } from "../hooks/useCalendar";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { CalendarHeader } from "../components/CalendarHeader";
-import { ViewType } from "../lib/types";
 import { DayView } from "../components/DayView";
 import { MonthView } from "../components/MonthView";
 import { WeekView } from "../components/WeekView";
@@ -33,15 +33,17 @@ export default function App() {
   const userId = location.state?.userId;
   const eventNameFromState = location.state?.eventName;
 
-  const [currentView, setCurrentView] = useState<ViewType>("week");
-  const [currentDate, setCurrentDate] = useState(() => {
-    const today = new Date();
-    const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(today.setDate(diff));
-  });
-
-  const [selectedSlots, setSelectedSlots] = useState<Set<string>>(new Set());
+  const {
+    currentView,
+    currentDate,
+    selectedSlots,
+    handlePreviousView,
+    handleNextView,
+    handleViewChange,
+    handleDateClick,
+    handleMonthClick,
+    toggleSlot
+  } = useCalendar("week");
   const [eventName, setEventName] = useState(eventNameFromState || "");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
@@ -118,55 +120,9 @@ export default function App() {
     }
   };
 
-  // ... (handlePreviousView, handleNextView などの他の関数は変更なし) ...
-  const handlePreviousView = () => {
-    const newDate = new Date(currentDate);
-    switch (currentView) {
-      case "day":
-        newDate.setDate(newDate.getDate() - 1);
-        break;
-      case "week":
-        newDate.setDate(newDate.getDate() - 7);
-        break;
-      case "month":
-        newDate.setMonth(newDate.getMonth() - 1);
-        break;
-      case "year":
-        newDate.setFullYear(newDate.getFullYear() - 1);
-        break;
-    }
-    setCurrentDate(newDate);
-  };
-
-  const handleNextView = () => {
-    const newDate = new Date(currentDate);
-    switch (currentView) {
-      case "day":
-        newDate.setDate(newDate.getDate() + 1);
-        break;
-      case "week":
-        newDate.setDate(newDate.getDate() + 7);
-        break;
-      case "month":
-        newDate.setMonth(newDate.getMonth() + 1);
-        break;
-      case "year":
-        newDate.setFullYear(newDate.getFullYear() + 1);
-        break;
-    }
-    setCurrentDate(newDate);
-  };
-
-  const handleViewChange = (view: ViewType) => setCurrentView(view);
-
   const handleSlotToggle = (slotKey: string) => {
     setErrorMessage(null); // Clear error on interaction
-    setSelectedSlots((prev) => {
-      const next = new Set(prev);
-      if (next.has(slotKey)) next.delete(slotKey);
-      else next.add(slotKey);
-      return next;
-    });
+    toggleSlot(slotKey);
   };
 
   const handleCopyShareUrl = async () => {
@@ -194,18 +150,7 @@ export default function App() {
     }
   }, [isShareModalOpen, shareUrl]);
 
-  const handleDateClick = (date: Date) => {
-    setCurrentDate(date);
-    setCurrentView("day");
-  };
 
-  const handleMonthClick = (monthIndex: number) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(monthIndex);
-    newDate.setDate(1);
-    setCurrentDate(newDate);
-    setCurrentView("month");
-  };
 
   const renderCalendarView = () => {
     switch (currentView) {
