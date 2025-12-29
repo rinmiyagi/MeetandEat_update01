@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom"; // useLocation を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
+import { LoadingOverlay } from "../components/LoadingOverlay";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
 import { DayView } from "../components/DayView";
 import { MonthView } from "../components/MonthView";
@@ -45,6 +46,7 @@ export default function App() {
 
   const [isCopied, setIsCopied] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const organizerSlots = useMemo(() => {
     const slots = new Set<string>();
@@ -87,6 +89,7 @@ export default function App() {
     }
 
     try {
+      setIsSaving(true);
       const schedulesToInsert = Array.from(selectedSlots).map((slotKey) => {
         const parts = slotKey.split("-");
         const hour = Number(parts.pop());
@@ -110,6 +113,8 @@ export default function App() {
     } catch (error: any) {
       console.error("Error saving schedules:", error);
       toast.error(`保存に失敗しました: ${error.message}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -254,6 +259,8 @@ export default function App() {
           </div>
         }
       />
+
+      <LoadingOverlay isVisible={isSaving} message="日程を保存しています..." />
 
       <div className="flex flex-1 overflow-hidden flex-col">
         <div className="bg-orange-50 border-b border-orange-200 px-6 py-2 text-orange-800 text-sm flex items-center gap-2">

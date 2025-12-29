@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Info } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useNavigate を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
+import { LoadingOverlay } from "../components/LoadingOverlay";
 import { CalendarHeader, ViewType } from "../components/CalendarHeader";
 import { DayView } from "../components/DayView";
 import { LocationData, LocationSearch } from "../components/LocationSearch";
@@ -184,7 +185,7 @@ export default function Participant() {
         if (schedError) throw schedError;
       }
 
-      toast.success("回答を保存しました！集計画面へ移動します。");
+      // toast.success("回答を保存しました！集計画面へ移動します。"); // Removed per user request
       setIsNameModalOpen(false);
       navigate(`/result?eventId=${eventId}`);
     } catch (error: any) {
@@ -277,7 +278,7 @@ export default function Participant() {
               onClick={handleOpenNameModal}
               className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md font-medium transition-colors shadow-sm"
             >
-              回答を保存して次へ
+              回答を保存
             </button>
           </div>
         }
@@ -293,6 +294,8 @@ export default function Participant() {
           <AvailabilitySummary selectedSlots={selectedSlots} errorMessage={errorMessage} />
         </div>
       </div>
+
+      <LoadingOverlay isVisible={isSaving} message="回答を保存しています..." />
 
       {isNameModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
