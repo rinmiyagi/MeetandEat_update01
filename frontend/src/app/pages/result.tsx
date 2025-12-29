@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { RefreshCcw } from "lucide-react";
 import VotingStatusView from "../components/VotingStatusView";
 import { FinalResultView } from "../components/FinalResultView";
+import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { supabase } from "../lib/supabaseClient";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
@@ -78,7 +79,17 @@ export default function Result() {
     );
   }
 
-  if (isLoading || !eventData) return <div className="p-10 text-center">読み込み中...</div>;
+  if (isLoading || !eventData) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col">
+        <Header />
+        <main className="flex-grow pt-24 pb-20">
+          <LoadingOverlay isVisible={true} message="イベント情報を読み込んでいます..." />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -99,12 +110,6 @@ export default function Result() {
               participants={participants}
               totalExpectedParticipants={eventData.amount}
             />
-          </div>
-        ) : isFinalizing ? (
-          <div className="flex flex-col items-center justify-center p-10 h-full">
-            <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
-            <p className="text-xl font-semibold text-gray-700">イベントを確定中...</p>
-            <p className="text-gray-500">最適なスケジュールとお店を計算しています！</p>
           </div>
         ) : (
           <div className="w-full px-4 max-w-screen-lg mx-auto">
@@ -133,6 +138,7 @@ export default function Result() {
             />
           </div>
         )}
+        <LoadingOverlay isVisible={isFinalizing} message="最適なスケジュールとお店を計算しています..." />
       </main>
 
       {/* Footer */}

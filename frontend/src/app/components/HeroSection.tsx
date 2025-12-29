@@ -8,7 +8,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { LocationSearch, LocationData } from './LocationSearch';
-import { LoadingOverlay } from './LoadingOverlay';
+import { LoadingOverlay } from './ui/loading-overlay';
 
 export function HeroSection() {
   const [eventName, setEventName] = useState("");
