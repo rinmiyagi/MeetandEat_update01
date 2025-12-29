@@ -10,6 +10,7 @@ import { Input } from "./ui/input";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { LocationSearch, LocationData } from './LocationSearch';
 import { LoadingOverlay } from './ui/loading-overlay';
+import { MESSAGES, PLACEHOLDERS } from "../lib/constants";
 
 export function HeroSection() {
   const [eventName, setEventName] = useState("");
@@ -23,8 +24,8 @@ export function HeroSection() {
   const handleCreateEvent = async () => {
     setError(null); // Reset error
     if (!eventName.trim() || !organizerName.trim()) {
-      setError("名前とイベント名を入力してください");
-      toast.error("名前とイベント名を入力してください");
+      setError(MESSAGES.ERROR.REQUIRED_FIELDS);
+      toast.error(MESSAGES.ERROR.REQUIRED_FIELDS);
       return;
     }
 
@@ -55,7 +56,7 @@ export function HeroSection() {
       });
     } catch (error: any) {
       console.error("Error creating event:", error);
-      toast.error(`作成に失敗しました: ${error.message}`);
+      toast.error(`${MESSAGES.ERROR.CREATE_FAILED}: ${error.message}`);
       setIsCreating(false); // Only reset on error, otherwise user sees glitch before nav
     }
   };
@@ -94,7 +95,7 @@ export function HeroSection() {
                 <label className="block text-sm mb-2 text-gray-700">あなたの名前</label>
                 <Input
                   type="text"
-                  placeholder="例：山田太郎"
+                  placeholder={PLACEHOLDERS.NAME}
                   value={organizerName}
                   onChange={(e) => {
                     setOrganizerName(e.target.value);
@@ -111,7 +112,7 @@ export function HeroSection() {
                 </label>
                 <LocationSearch
                   onSelect={setLocation}
-                  placeholder="例：渋谷駅、新宿駅..."
+                  placeholder={PLACEHOLDERS.STATION}
                 />
               </div>
 
@@ -119,7 +120,7 @@ export function HeroSection() {
                 <label className="block text-sm mb-2 text-gray-700">イベント名</label>
                 <Input
                   type="text"
-                  placeholder="例：チーム忘年会"
+                  placeholder={PLACEHOLDERS.EVENT_NAME}
                   value={eventName}
                   onChange={(e) => {
                     setEventName(e.target.value);
@@ -165,7 +166,7 @@ export function HeroSection() {
           </Card>
         </div>
       </div>
-      <LoadingOverlay isVisible={isCreating} message="イベントを作成しています..." />
+      <LoadingOverlay isVisible={isCreating} message={MESSAGES.LOADING.CREATE_EVENT} />
     </section >
   );
 }

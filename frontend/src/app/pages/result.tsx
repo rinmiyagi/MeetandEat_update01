@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { RefreshCcw } from "lucide-react";
 import VotingStatusView from "../components/VotingStatusView";
 import { FinalResultView } from "../components/FinalResultView";
+import { MESSAGES, UI_TEXT, DEFAULTS } from "../lib/constants";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { finalizeEvent } from "../lib/api/events";
 import { Header } from "../components/Header";
@@ -41,7 +42,7 @@ export default function Result() {
     } catch (err: any) {
       console.error("Failed to finalize event:", err);
 
-      let message = "イベントの確定に失敗しました";
+      let message = MESSAGES.ERROR.FINALIZE_FAILED;
       // Try to parse Supabase FunctionsHttpError body if it exists
       if (err && typeof err === 'object') {
         // If the edge function returned a JSON error (e.g. { error: "No users found" })
@@ -82,7 +83,7 @@ export default function Result() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header />
         <main className="flex-grow pt-24 pb-20">
-          <LoadingOverlay isVisible={true} message="イベント情報を読み込んでいます..." />
+          <LoadingOverlay isVisible={true} message={MESSAGES.LOADING.LOAD_EVENT} />
         </main>
         <Footer />
       </div>
@@ -101,7 +102,7 @@ export default function Result() {
             <FinalResultView
               confirmedDate={eventData.confirmed_date}
               restaurantInfo={eventData.restaurant_info}
-              nearestStation={eventData.target_station || "不明な駅"}
+              nearestStation={eventData.target_station || DEFAULTS.UNKNOWN_STATION}
               organizerId={organizerId}
               organizerName={organizerName}
               organizerDates={organizerDates}
@@ -123,7 +124,7 @@ export default function Result() {
                   disabled={isFinalizing}
                   className="bg-orange-600 text-white text-lg font-bold py-3 px-10 rounded-full shadow-lg hover:bg-orange-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isFinalizing ? "計算中..." : "結果を見る"}
+                  {isFinalizing ? UI_TEXT.CALCULATING : UI_TEXT.SEE_RESULT}
                 </button>
               </div>
             )}
@@ -136,7 +137,7 @@ export default function Result() {
             />
           </div>
         )}
-        <LoadingOverlay isVisible={isFinalizing} message="最適なスケジュールとお店を計算しています..." />
+        <LoadingOverlay isVisible={isFinalizing} message={MESSAGES.LOADING.CALCULATING} />
       </main>
 
       {/* Footer */}

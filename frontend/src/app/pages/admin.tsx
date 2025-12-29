@@ -21,6 +21,7 @@ import {
 import { Input } from "../components/ui/input";
 import { formatDateKey, toISOString, createDateFromKeyAndHour } from "../lib/dateUtils";
 import { saveSchedules } from "../lib/api/schedules";
+import { MESSAGES } from "../lib/constants";
 
 export default function App() {
   const navigate = useNavigate();
@@ -78,13 +79,13 @@ export default function App() {
   const handleSaveSchedules = async () => {
     setErrorMessage(null); // Reset error
     if (selectedSlots.size === 0) {
-      setErrorMessage("日程を選択してください");
+      setErrorMessage(MESSAGES.VALIDATION.SELECT_SCHEDULE);
       return;
     }
 
     // ここで userId の存在を確認
     if (!userId) {
-      toast.error("ユーザーIDが見つかりません。イベント作成からやり直してください。");
+      toast.error(MESSAGES.VALIDATION.USER_NOT_FOUND);
       return;
     }
 
@@ -110,7 +111,7 @@ export default function App() {
       setIsShareModalOpen(true);
     } catch (error: any) {
       console.error("Error saving schedules:", error);
-      toast.error(`保存に失敗しました: ${error.message}`);
+      toast.error(`${MESSAGES.ERROR.SAVE_FAILED}: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -258,7 +259,7 @@ export default function App() {
         }
       />
 
-      <LoadingOverlay isVisible={isSaving} message="日程を保存しています..." />
+      <LoadingOverlay isVisible={isSaving} message={MESSAGES.LOADING.SAVE_SCHEDULE} />
 
       <div className="flex flex-1 overflow-hidden flex-col">
         <div className="bg-orange-50 border-b border-orange-200 px-6 py-2 text-orange-800 text-sm flex items-center gap-2">
@@ -296,7 +297,7 @@ export default function App() {
               </Button>
             </div>
             <p className={`text-xs h-4 transition-colors ${isCopied ? "text-orange-600 font-bold" : "text-muted-foreground"}`}>
-              {isCopied ? "コピーしました！" : "OKを押すと集計画面へ移動します。"}
+              {isCopied ? MESSAGES.SUCCESS.COPIED : "OKを押すと集計画面へ移動します。"}
             </p>
           </div>
           <DialogFooter>
