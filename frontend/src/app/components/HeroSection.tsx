@@ -1,73 +1,32 @@
 import { Minus, Plus, AlertCircle } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { createEvent } from "../lib/api/events";
-import { registerParticipant } from "../lib/api/participants";
+
+import { useCreateEvent } from "../hooks/useCreateEvent";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { LocationSearch, LocationData } from './LocationSearch';
+import { LocationSearch } from './LocationSearch';
 import { LoadingOverlay } from './ui/loading-overlay';
 import { MESSAGES, PLACEHOLDERS } from "../lib/constants";
 
 export function HeroSection() {
-  const [eventName, setEventName] = useState("");
-  const [organizerName, setOrganizerName] = useState("");
-  const [participants, setParticipants] = useState(2);
-  const [location, setLocation] = useState<LocationData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isCreating, setIsCreating] = useState(false);
-  const navigate = useNavigate();
-
-  const handleCreateEvent = async () => {
-    setError(null); // Reset error
-    if (!eventName.trim() || !organizerName.trim()) {
-      setError(MESSAGES.ERROR.REQUIRED_FIELDS);
-      toast.error(MESSAGES.ERROR.REQUIRED_FIELDS);
-      return;
-    }
-
-    try {
-      setIsCreating(true);
-      // 1. events テーブルに挿入
-      const eventData = await createEvent(eventName, participants);
-
-      // 2. users テーブルに挿入し、作成されたデータを取得する
-      const userData = await registerParticipant({
-        eventId: eventData.id,
-        name: organizerName,
-        role: "organizer",
-        lat: location?.lat,
-        lng: location?.lng,
-        nearestStation: location?.name
-      });
+  const {
+    eventName,
+    setEventName,
+    organizerName,
+    setOrganizerName,
+    participants,
+    location, // unused in render, but exposed by hook
+    setLocation,
+    error,
+    setError,
+    isCreating,
+    incrementParticipants,
+    decrementParticipants,
+    handleCreateEvent
+  } = useCreateEvent();
 
 
-
-      // 3. 次のページへ遷移（state に ID を持たせる）
-      navigate(`/admin?hash=${eventData.hash}`, {
-        state: {
-          eventId: eventData.id,
-          userId: userData.id,
-          eventName: eventData.name
-        }
-      });
-    } catch (error: any) {
-      console.error("Error creating event:", error);
-      toast.error(`${MESSAGES.ERROR.CREATE_FAILED}: ${error.message}`);
-      setIsCreating(false); // Only reset on error, otherwise user sees glitch before nav
-    }
-  };
-
-  const incrementParticipants = () => {
-    if (participants < 20) setParticipants(participants + 1);
-  };
-
-  const decrementParticipants = () => {
-    if (participants > 1) setParticipants(participants - 1);
-  };
 
   return (
     <section className="relative bg-gradient-to-b from-orange-50 to-white pt-20 pb-24">

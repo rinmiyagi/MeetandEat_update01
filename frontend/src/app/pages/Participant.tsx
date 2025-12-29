@@ -1,11 +1,12 @@
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import { useCalendar } from "../hooks/useCalendar";
 import { toast } from "sonner";
 import { Info } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useNavigate を追加
 import { AvailabilitySummary } from "../components/AvailabilitySummary";
 import { LoadingOverlay } from "../components/ui/loading-overlay";
 import { CalendarHeader } from "../components/CalendarHeader";
-import { ViewType, LocationData } from "../lib/types";
+import { LocationData } from "../lib/types";
 import { DayView } from "../components/DayView";
 import { LocationSearch } from "../components/LocationSearch";
 import { MonthView } from "../components/MonthView";
@@ -33,15 +34,17 @@ export default function Participant() {
   const eventId = searchParams.get("eventId");
   const [location, setLocation] = useState<LocationData | null>(null);
 
-  const [currentView, setCurrentView] = useState<ViewType>("week");
-  const [currentDate, setCurrentDate] = useState(() => {
-    const today = new Date();
-    const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(today.setDate(diff));
-  });
-
-  const [selectedSlots, setSelectedSlots] = useState<Set<string>>(new Set());
+  const {
+    currentView,
+    currentDate,
+    selectedSlots,
+    handlePreviousView,
+    handleNextView,
+    handleViewChange,
+    handleDateClick,
+    handleMonthClick,
+    toggleSlot
+  } = useCalendar("week");
   const [organizerSlots, setOrganizerSlots] = useState<Set<string>>(new Set());
   const [eventName, setEventName] = useState("");
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
@@ -58,45 +61,7 @@ export default function Participant() {
     }
   }, [isNameModalOpen]);
 
-  const handlePreviousView = () => {
-    const newDate = new Date(currentDate);
-    switch (currentView) {
-      case "day":
-        newDate.setDate(newDate.getDate() - 1);
-        break;
-      case "week":
-        newDate.setDate(newDate.getDate() - 7);
-        break;
-      case "month":
-        newDate.setMonth(newDate.getMonth() - 1);
-        break;
-      case "year":
-        newDate.setFullYear(newDate.getFullYear() - 1);
-        break;
-    }
-    setCurrentDate(newDate);
-  };
 
-  const handleNextView = () => {
-    const newDate = new Date(currentDate);
-    switch (currentView) {
-      case "day":
-        newDate.setDate(newDate.getDate() + 1);
-        break;
-      case "week":
-        newDate.setDate(newDate.getDate() + 7);
-        break;
-      case "month":
-        newDate.setMonth(newDate.getMonth() + 1);
-        break;
-      case "year":
-        newDate.setFullYear(newDate.getFullYear() + 1);
-        break;
-    }
-    setCurrentDate(newDate);
-  };
-
-  const handleViewChange = (view: ViewType) => setCurrentView(view);
 
   // 幹事のデータを取得
   useEffect(() => {
@@ -212,12 +177,7 @@ export default function Participant() {
   const handleSlotToggle = (slotKey: string) => {
     if (!organizerSlots.has(slotKey)) return;
     setErrorMessage(null); // Clear error on interaction
-    setSelectedSlots((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(slotKey)) newSet.delete(slotKey);
-      else newSet.add(slotKey);
-      return newSet;
-    });
+    toggleSlot(slotKey);
   };
 
   const renderCalendarView = () => {
@@ -237,10 +197,7 @@ export default function Participant() {
           <MonthView
             currentMonth={currentDate}
             {...commonProps}
-            onDateClick={(d) => {
-              setCurrentDate(d);
-              setCurrentView("day");
-            }}
+            onDateClick={handleDateClick}
           />
         );
       case "year":
@@ -248,12 +205,7 @@ export default function Participant() {
           <YearView
             currentYear={currentDate}
             {...commonProps}
-            onMonthClick={(m) => {
-              const d = new Date(currentDate);
-              d.setMonth(m);
-              setCurrentDate(d);
-              setCurrentView("month");
-            }}
+            onMonthClick={handleMonthClick}
           />
         );
       default:
