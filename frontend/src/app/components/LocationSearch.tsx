@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Loader2, MapPin, Search, Navigation, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { useLocationSearch, NominatimResult } from '../hooks/useLocationSearch';
+import { UI_TEXT } from "../lib/constants";
 
 export interface LocationData {
     name: string;
@@ -18,7 +19,7 @@ export interface LocationSearchProps {
     defaultValue?: string;
 }
 
-export function LocationSearch({ onSelect, placeholder = "駅名を検索...", defaultValue = "" }: LocationSearchProps) {
+export function LocationSearch({ onSelect, placeholder = UI_TEXT.LOCATION_SEARCH_PLACEHOLDER, defaultValue = "" }: LocationSearchProps) {
     const {
         query,
         setQuery,
@@ -53,10 +54,10 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
             <Tabs defaultValue="search" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-2">
                     <TabsTrigger value="search" className="flex items-center gap-2">
-                        <Search className="w-4 h-4" /> 検索
+                        <Search className="w-4 h-4" /> {UI_TEXT.SEARCH}
                     </TabsTrigger>
                     <TabsTrigger value="current" className="flex items-center gap-2">
-                        <Navigation className="w-4 h-4" /> 現在地
+                        <Navigation className="w-4 h-4" /> {UI_TEXT.CURRENT_LOCATION}
                     </TabsTrigger>
                 </TabsList>
 
@@ -93,7 +94,7 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                     {error && (
                         <Alert variant="destructive" className="mt-4 bg-red-50 border-red-200 text-red-600">
                             <AlertCircle className="h-4 w-4" />
-                            <AlertTitle>検索結果なし</AlertTitle>
+                            <AlertTitle>{UI_TEXT.NO_SEARCH_RESULTS}</AlertTitle>
                             <AlertDescription>
                                 {error}
                             </AlertDescription>
@@ -136,20 +137,20 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                         disabled={isLoading}
                     >
                         {isLoading ? <Loader2 className="animate-spin w-4 h-4" /> : <Navigation className="w-4 h-4" />}
-                        現在地を取得して設定
+                        {UI_TEXT.GET_CURRENT_LOCATION}
                     </Button>
 
                     {detectedAddress && (
                         <Alert className="mt-4 border-green-200 bg-green-50/50 text-green-900">
                             <CheckCircle2 className="h-4 w-4 text-green-600" />
-                            <AlertTitle className="text-green-800">位置情報を取得しました</AlertTitle>
+                            <AlertTitle className="text-green-800">{UI_TEXT.LOCATION_ACQUIRED}</AlertTitle>
                             <AlertDescription className="text-green-700">
                                 <div className="flex items-center gap-1 mt-1 font-medium">
                                     <MapPin className="h-3.5 w-3.5" />
                                     {detectedAddress}
                                 </div>
                                 <div className="text-xs text-green-600/80 mt-1">
-                                    ※意図しない場所の場合は、検索タブから駅や施設名を指定してください
+                                    {UI_TEXT.LOCATION_NOTE}
                                 </div>
                             </AlertDescription>
                         </Alert>
@@ -158,7 +159,7 @@ export function LocationSearch({ onSelect, placeholder = "駅名を検索...", d
                     {error && (
                         <Alert variant="destructive" className="mt-4 bg-red-50 border-red-200 text-red-600">
                             <AlertCircle className="h-4 w-4" />
-                            <AlertTitle>取得エラー</AlertTitle>
+                            <AlertTitle>{UI_TEXT.FETCH_ERROR}</AlertTitle>
                             <AlertDescription>
                                 {error}
                             </AlertDescription>

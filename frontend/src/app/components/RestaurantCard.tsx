@@ -1,4 +1,5 @@
 import { MapPin, ExternalLink, Banknote } from "lucide-react";
+import { UI_TEXT } from "../lib/constants";
 
 export interface Restaurant {
     name: string;
@@ -82,7 +83,7 @@ export const RestaurantCard = ({ shop, index }: RestaurantCardProps) => {
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 w-full bg-orange-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-orange-700 transition-colors mt-2 sm:mt-0"
                     >
-                        <span>お店の詳細を見る</span>
+                        <span>{UI_TEXT.VIEW_RESTAURANT_DETAILS}</span>
                         <ExternalLink className="w-4 h-4" />
                     </a>
                 )}

@@ -1,3 +1,4 @@
+import { UI_TEXT } from "../lib/constants";
 import { calculateVotingData, formatDateLabel } from "../lib/votingUtils";
 
 type VotingStatusViewProps = {
@@ -41,18 +42,18 @@ export default function VotingStatusView({
           {bestCandidate ? (
             <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r shadow-sm flex flex-col gap-2">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="text-orange-800 font-bold text-lg">🌟 現時点での最適候補：</span>
+                <span className="text-orange-800 font-bold text-lg">{UI_TEXT.OPTIMAL_CANDIDATE}</span>
                 <span className="text-2xl font-bold text-gray-800 tracking-wide">
                   {formatDateLabel(bestCandidate.date).join(" ")}
                 </span>
               </div>
               <p className="text-sm text-gray-600">
-                投票状況: <span className="font-bold">{participantLabels.length + 1}</span> /
+                {UI_TEXT.VOTING_STATUS}: <span className="font-bold">{participantLabels.length + 1}</span> /
                 <span className="font-bold ml-1">{totalExpectedParticipants ?? "?"}</span> 人が投票済み
               </p>
             </div>
           ) : (
-            <div className="text-gray-500 font-medium">現時点での最適候補：未定</div>
+            <div className="text-gray-500 font-medium">{UI_TEXT.OPTIMAL_CANDIDATE}{UI_TEXT.UNDECIDED}</div>
           )}
         </div>
       )}

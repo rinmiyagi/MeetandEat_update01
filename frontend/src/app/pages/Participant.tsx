@@ -14,6 +14,7 @@ import { formatDateKey, getHour, toISOString, createDateFromKeyAndHour } from ".
 import { registerParticipant } from "../lib/api/participants";
 import { saveSchedules } from "../lib/api/schedules";
 import { supabase } from "../lib/supabaseClient";
+import { MESSAGES, PLACEHOLDERS, DEFAULTS, UI_TEXT } from "../lib/constants";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -147,11 +148,11 @@ export default function Participant() {
   const handleSaveParticipantSchedules = async (name: string) => {
     // 0件チェックは削除（確認ダイアログで確認済みのため）
     if (!eventId) {
-      toast.error("イベントIDが見つかりません。");
+      toast.error(MESSAGES.ERROR.NO_EVENT_ID);
       return;
     }
 
-    const safeName = name.trim() || "参加者";
+    const safeName = name.trim() || DEFAULTS.PARTICIPANT_NAME;
 
     try {
       setIsSaving(true);
@@ -187,7 +188,7 @@ export default function Participant() {
       navigate(`/result?eventId=${eventId}`);
     } catch (error: any) {
       console.error("Error saving schedules:", error);
-      toast.error(`保存に失敗しました: ${error.message}`);
+      toast.error(`${MESSAGES.ERROR.SAVE_FAILED}: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -292,7 +293,7 @@ export default function Participant() {
         </div>
       </div>
 
-      <LoadingOverlay isVisible={isSaving} message="回答を保存しています..." />
+      <LoadingOverlay isVisible={isSaving} message={MESSAGES.LOADING.SAVE_ANSWER} />
 
       {isNameModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -313,10 +314,10 @@ export default function Participant() {
                 type="text"
                 value={participantName}
                 onChange={(e) => setParticipantName(e.target.value)}
-                placeholder="例: 山田 太郎"
+                placeholder={PLACEHOLDERS.NAME}
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 mb-6"
               />
-              <LocationSearch onSelect={setLocation} placeholder="例：渋谷駅、新宿駅..." />
+              <LocationSearch onSelect={setLocation} placeholder={PLACEHOLDERS.STATION} />
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
@@ -331,7 +332,7 @@ export default function Participant() {
                   className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-70"
                   disabled={isSaving}
                 >
-                  {isSaving ? "保存中..." : "保存する"}
+                  {isSaving ? UI_TEXT.SAVING : UI_TEXT.SAVE}
                 </button>
               </div>
             </form>

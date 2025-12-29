@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { LocationData } from '../components/LocationSearch';
+import { MESSAGES } from "../lib/constants";
 
 export type NominatimAddress = {
     province?: string;
@@ -105,11 +106,11 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
             const data = await res.json();
             setResults(data);
             if (data.length === 0) {
-                setError("検索結果が見つかりませんでした");
+                setError(MESSAGES.ERROR.LOCATION_SEARCH_FAILED);
             }
         } catch (error) {
             console.error("Search failed", error);
-            setError("検索に失敗しました");
+            setError(MESSAGES.ERROR.LOCATION_SEARCH_FAILED);
         } finally {
             setIsLoading(false);
         }
@@ -175,11 +176,11 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
                     lng: targetLng
                 });
             } else {
-                setError("場所を特定できませんでした");
+                setError(MESSAGES.ERROR.LOCATION_DETECT_FAILED);
             }
         } catch (error) {
             console.error("Reverse geocode failed", error);
-            setError("場所の特定に失敗しました");
+            setError(MESSAGES.ERROR.LOCATION_DETECT_FAILED);
         } finally {
             setIsLoading(false);
         }
@@ -188,7 +189,7 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
     const handleGetCurrentLocation = () => {
         setError(null);
         if (!navigator.geolocation) {
-            setError("お使いのブラウザは位置情報をサポートしていません");
+            setError(MESSAGES.ERROR.LOCATION_NOT_SUPPORTED);
             return;
         }
 
@@ -202,16 +203,16 @@ export function useLocationSearch(onSelect: (location: LocationData) => void, de
                 setIsLoading(false);
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        setError("位置情報の利用が許可されていません。ブラウザの設定をご確認ください。");
+                        setError(MESSAGES.ERROR.LOCATION_PERMISSION_DENIED);
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        setError("位置情報を取得できませんでした。");
+                        setError(MESSAGES.ERROR.GEOLOCATION_UNAVAILABLE);
                         break;
                     case error.TIMEOUT:
-                        setError("位置情報の取得がタイムアウトしました。");
+                        setError(MESSAGES.ERROR.GEOLOCATION_TIMEOUT);
                         break;
                     default:
-                        setError("位置情報の取得に失敗しました。");
+                        setError(MESSAGES.ERROR.GEOLOCATION_FAILED);
                 }
             }
         );
