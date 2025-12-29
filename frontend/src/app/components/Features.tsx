@@ -10,13 +10,13 @@ export function Features() {
     },
     {
       icon: Search,
-      title: 'リアルタイムでお店検索',
-      description: 'ホットペッパーAPIを使って、中間地点の最適なレストランを即座に検索します。',
+      title: 'リアルタイムで\nお店検索',
+      description: 'ホットペッパーAPIを使って、最適なレストランを即座に検索します。',
     },
     {
       icon: Clock,
-      title: '中間地点を自動計算',
-      description: 'Google Routes APIで全員の位置から最適な集合場所を自動で算出します。',
+      title: '移動時間を考慮した\n最適化',
+      description: '全員の移動時間を計算し、最も集まりやすい場所（駅）を自動で算出します。',
     },
     {
       icon: Shield,
@@ -47,8 +47,10 @@ export function Features() {
                   <div className="w-14 h-14 rounded-lg bg-orange-50 flex items-center justify-center">
                     <Icon className="w-7 h-7 text-orange-600" />
                   </div>
-                  <h3 className="text-lg text-gray-900">{feature.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <h3 className="text-lg text-gray-900 font-bold px-2 whitespace-pre-wrap leading-tight h-[3.5rem] flex items-center justify-center">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed min-h-[4rem] flex items-center justify-center">
                     {feature.description}
                   </p>
                 </div>
@@ -74,7 +76,7 @@ export function Features() {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span>Compute Route Matrix Pro</span>
+              <span>Google Places API</span>
             </div>
           </div>
         </div>
