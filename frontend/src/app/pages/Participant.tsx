@@ -10,7 +10,7 @@ import { LocationData, LocationSearch } from "../components/LocationSearch";
 import { MonthView } from "../components/MonthView";
 import { WeekView } from "../components/WeekView";
 import { YearView } from "../components/YearView";
-import { formatDateKey, getHour, toISOString } from "../lib/dateUtils";
+import { formatDateKey, getHour, toISOString, createDateFromKeyAndHour } from "../lib/dateUtils";
 import { supabase } from "../lib/supabaseClient";
 import {
   AlertDialog,
@@ -173,7 +173,7 @@ export default function Participant() {
           const parts = slotKey.split("-");
           const hour = Number(parts.pop());
           const dateStr = parts.join("-");
-          const date = new Date(`${dateStr}T${String(hour).padStart(2, "0")}:00:00`);
+          const date = createDateFromKeyAndHour(dateStr, hour);
 
           return {
             user_id: userData.id,

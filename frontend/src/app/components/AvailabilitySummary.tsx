@@ -1,5 +1,6 @@
 import { Clock, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { formatDateWithDay } from '../lib/dateUtils';
 
 interface AvailabilitySummaryProps {
   selectedSlots: Set<string>;
@@ -60,14 +61,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
     return `${hour}:00`;
   };
 
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + 'T00:00:00');
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-    const weekday = weekdays[date.getDay()];
-    return `${month}月${day}日(${weekday})`;
-  };
+  /* Removed local formatDate, using import */
 
   const groupedSlots = groupSlotsByDate();
   const hasSelection = selectedSlots.size > 0;
@@ -115,7 +109,7 @@ export function AvailabilitySummary({ selectedSlots, errorMessage }: Availabilit
           .map(([dateStr, hours]) => (
             <div key={dateStr} className="pb-3 border-b border-gray-100 last:border-b-0">
               <div className="text-sm mb-1 text-gray-900">
-                {formatDate(dateStr)}
+                {formatDateWithDay(dateStr)}
               </div>
               <div className="text-sm text-gray-600">
                 {formatTimeRange(hours)}
