@@ -2,7 +2,8 @@ import { Minus, Plus, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabaseClient";
+import { createEvent } from "../lib/api/events";
+import { registerParticipant } from "../lib/api/participants";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
@@ -30,37 +31,19 @@ export function HeroSection() {
     try {
       setIsCreating(true);
       // 1. events テーブルに挿入
-      const { data: eventData, error: eventError } = await supabase
-        .from("events")
-        .insert([
-          {
-            name: eventName,
-            amount: participants,
-            hash: Math.random().toString(36).substring(2, 10)
-          }
-        ])
-        .select()
-        .single();
-
-      if (eventError) throw eventError;
+      const eventData = await createEvent(eventName, participants);
 
       // 2. users テーブルに挿入し、作成されたデータを取得する
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .insert([
-          {
-            event_id: eventData.id,
-            name: organizerName,
-            role: "organizer",
-            lat: location?.lat || null,
-            lng: location?.lng || null,
-            nearest_station: location?.name || null
-          }
-        ])
-        .select() // ここで挿入後のデータを取得
-        .single(); // 1件として取得
+      const userData = await registerParticipant({
+        eventId: eventData.id,
+        name: organizerName,
+        role: "organizer",
+        lat: location?.lat,
+        lng: location?.lng,
+        nearestStation: location?.name
+      });
 
-      if (userError) throw userError;
+
 
       // 3. 次のページへ遷移（state に ID を持たせる）
       navigate(`/admin?hash=${eventData.hash}`, {

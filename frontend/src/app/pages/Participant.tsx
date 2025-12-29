@@ -11,6 +11,8 @@ import { MonthView } from "../components/MonthView";
 import { WeekView } from "../components/WeekView";
 import { YearView } from "../components/YearView";
 import { formatDateKey, getHour, toISOString, createDateFromKeyAndHour } from "../lib/dateUtils";
+import { registerParticipant } from "../lib/api/participants";
+import { saveSchedules } from "../lib/api/schedules";
 import { supabase } from "../lib/supabaseClient";
 import {
   AlertDialog,
@@ -144,28 +146,24 @@ export default function Participant() {
   // ★ 追加：参加者の保存処理
   const handleSaveParticipantSchedules = async (name: string) => {
     // 0件チェックは削除（確認ダイアログで確認済みのため）
+    if (!eventId) {
+      toast.error("イベントIDが見つかりません。");
+      return;
+    }
 
     const safeName = name.trim() || "参加者";
 
     try {
       setIsSaving(true);
       // 1. users テーブルに登録
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .insert([
-          {
-            event_id: eventId,
-            name: safeName,
-            role: "participant",
-            lat: location?.lat || null,
-            lng: location?.lng || null,
-            nearest_station: location?.name || null
-          }
-        ])
-        .select()
-        .single();
-
-      if (userError) throw userError;
+      const userData = await registerParticipant({
+        eventId: eventId,
+        name: safeName,
+        role: "participant",
+        lat: location?.lat,
+        lng: location?.lng,
+        nearestStation: location?.name
+      });
 
       // 2. schedules テーブルに保存 (選択がある場合のみ)
       if (selectedSlots.size > 0) {
@@ -181,8 +179,7 @@ export default function Participant() {
           };
         });
 
-        const { error: schedError } = await supabase.from("schedules").insert(schedulesToInsert);
-        if (schedError) throw schedError;
+        await saveSchedules(schedulesToInsert);
       }
 
       // toast.success("回答を保存しました！集計画面へ移動します。"); // Removed per user request
