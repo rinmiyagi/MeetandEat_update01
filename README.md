@@ -1,7 +1,10 @@
 # Meet And Eat
  - 技育CAMP2025 ハッカソン Vol.16
  - チーム名：ノリノリノリノリ
- - 作品URL: https://team17.vercel.app/
+ - 元作品URL: https://team17.vercel.app/
+ 
+ - 新URL：https://meetandeat-update-01-backup.vercel.app/
+
   
   
   ## Running the code
